@@ -169,16 +169,15 @@ class VacancyTestUser(HttpUser):
         self._make_grpc_call(self.vacancy_stub.DeleteVacancy, delete_request, metadata, "DeleteVacancy")
 
     def background_fetch_all_vacancies(self) -> None:
-        """Continuously fetch all vacancies in the background."""
-        while True:
-            if not self.vacancy_stub:
-                logging.error("vacancy_stub is not initialized")
-                return
+        """Fetch all vacancies and reschedule the task."""
+        if not self.vacancy_stub:
+            logging.error("vacancy_stub is not initialized")
+            return
 
-            metadata = (('authorization', f'Bearer {self.token}'),)
-            fetch_all_request = GetVacanciesRequest()
-            self._make_grpc_call(self.vacancy_stub.GetVacancies, fetch_all_request, metadata, "GetAllVacancies")
-            gevent.sleep(45)
+        metadata = (('authorization', f'Bearer {self.token}'),)
+        fetch_all_request = GetVacanciesRequest()
+        self._make_grpc_call(self.vacancy_stub.GetVacancies, fetch_all_request, metadata, "GetAllVacancies")
+        gevent.spawn_later(45, self.background_fetch_all_vacancies)
 
     def _make_grpc_call(self, stub_method, request, metadata, method_name):
         """Helper method to make a gRPC call and handle events and logging."""
