@@ -4,10 +4,10 @@ import random
 import time
 from locust import HttpUser, task, between, events
 from grpc_vacancy_load_test.models import Config
-from grpc_vacancy_load_test.auth_service_pb2 import SignInUserRequest
-from grpc_vacancy_load_test.auth_service_pb2_grpc import AuthServiceStub
-from grpc_vacancy_load_test.vacancy_service_pb2 import CreateVacancyRequest, UpdateVacancyRequest, GetVacancyRequest, DeleteVacancyRequest, ListVacanciesRequest
-from grpc_vacancy_load_test.vacancy_service_pb2_grpc import VacancyServiceStub
+from compiled_proto.auth_service_pb2 import SignInUserRequest
+from compiled_proto.auth_service_pb2_grpc import AuthServiceStub
+from compiled_proto.vacancy_service_pb2 import CreateVacancyRequest, UpdateVacancyRequest, GetVacancyRequest, DeleteVacancyRequest, ListVacanciesRequest
+from compiled_proto.vacancy_service_pb2_grpc import VacancyServiceStub
 
 class VacancyTestUser(HttpUser):
     wait_time = between(1, 2)

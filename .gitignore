@@ -163,4 +163,5 @@ cython_debug/
 
 # Custom
 proto/
+compiled_proto/
 credentials.json
