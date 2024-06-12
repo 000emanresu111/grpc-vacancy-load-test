@@ -165,3 +165,5 @@ cython_debug/
 proto/
 compiled_proto/
 credentials.json
+*_grpc.py
+*_pb2.py

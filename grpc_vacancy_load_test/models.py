@@ -1,12 +1,12 @@
-from pydantic import BaseModel, Field, EmailStr, SecretStr
+from pydantic import BaseModel, SecretStr
 from typing import List
 
 class UserCredentials(BaseModel):
-    email: EmailStr
-    password: SecretStr
-    token: str = Field(default="")
+    name: str
+    email: str
+    password: str
+    verification_code: str
 
 class Config(BaseModel):
     server_address: str
-    credentials_file: str
     user_credentials: List[UserCredentials]
