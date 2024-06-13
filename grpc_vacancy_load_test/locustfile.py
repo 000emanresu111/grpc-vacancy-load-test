@@ -6,16 +6,17 @@ from locust import HttpUser, task, between, events
 import gevent
 import logging
 from grpc_vacancy_load_test.models import Config
-from grpc_vacancy_load_test.rpc_signin_user_pb2 import SignInUserInput
-from grpc_vacancy_load_test.rpc_create_vacancy_pb2 import CreateVacancyRequest
-from grpc_vacancy_load_test.rpc_update_vacancy_pb2 import UpdateVacancyRequest
-from grpc_vacancy_load_test.vacancy_service_pb2 import GetVacanciesRequest, VacancyRequest
-from grpc_vacancy_load_test.vacancy_service_pb2_grpc import VacancyServiceStub
-from grpc_vacancy_load_test.auth_service_pb2_grpc import AuthServiceStub
+from rpc_signin_user_pb2 import SignInUserInput
+from rpc_create_vacancy_pb2 import CreateVacancyRequest
+from rpc_update_vacancy_pb2 import UpdateVacancyRequest
+from vacancy_service_pb2 import GetVacanciesRequest, VacancyRequest
+from vacancy_service_pb2_grpc import VacancyServiceStub
+from auth_service_pb2_grpc import AuthServiceStub
 
 logging.basicConfig(level=logging.INFO)
 
 class VacancyTestUser(HttpUser):
+    host = "http://localhost"
     wait_time = between(1, 2)
 
     def __init__(self, environment):
@@ -85,7 +86,7 @@ class VacancyTestUser(HttpUser):
         )
         start_time = time.time()
         try:
-            response = self.auth_stub.SignInUser(signin_request, timeout=10)
+            response = self.auth_stub.SignInUser(signin_request, timeout=2)
             self.token = response.access_token
             total_time = int((time.time() - start_time) * 1000)
             events.request.fire(
